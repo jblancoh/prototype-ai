@@ -4,7 +4,9 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { cn, getPokemonColor } from '@/lib/utils';
 
-export function PokemonSearch() {
+export function PokemonSearch({
+  onAddToTeam
+}) {
   const [pokemonName, setPokemonName] = useState('');
   const [pokemonData, setPokemonData] = useState(null);
 
@@ -31,11 +33,13 @@ export function PokemonSearch() {
       </div>
       {pokemonData && (
         <div 
-        // inline-style
-        style={{
-          backgroundColor: getPokemonColor(pokemonData.types[0].type.name)
-        }}
-        className={"flex flex-col items-center justify-center gap-4 p-4 rounded-lg"}>
+          // inline-style
+          style={{
+            backgroundColor: getPokemonColor(pokemonData.types[0].type.name)
+          }}
+          className={"flex flex-col items-center justify-center gap-4 p-4 rounded-lg"}
+          onClick={() => onAddToTeam(pokemonData)}
+        >
           <h2 className="text-2xl font-bold">{pokemonData.name}</h2>
           <img src={pokemonData.sprites.front_default} alt={pokemonData.name} />
           <p className="text-lg">Tipo: {pokemonData.types.map(type => type.type.name).join(', ')}</p>
