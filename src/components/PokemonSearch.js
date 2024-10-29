@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { cn, getPokemonColor } from '@/lib/utils';
 
 export function PokemonSearch({
-  onAddToTeam
+  onAddToTeam,
 }) {
   const [pokemonName, setPokemonName] = useState('');
   const [pokemonData, setPokemonData] = useState(null);
