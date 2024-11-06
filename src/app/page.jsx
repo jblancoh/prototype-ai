@@ -1,22 +1,16 @@
 "use client";
 import { PokemonSearch } from "@/components/PokemonSearch";
 import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [team, setTeam] = useState([]);
-  const [suggestions, setSuggestions] = useState();
+  const [suggestion, setSuggestion] = useState();
   
-  const addToTeam = (pokemon) => {
-    if (team.length < 6 && !team.find(p => p.name === pokemon.name)) {
-      setTeam([...team, pokemon]);
-    } else {
-      alert("Tu equipo ya tiene 6 Pokémon o este Pokémon ya está en tu equipo.");
-    }
-  };
-  
-  const fetchSuggestions = async () => {
+  const getSuggestion = async () => {
     const teamNames = team.map((pokemon) => pokemon.name).join(', ');
-    setSuggestions([])
+    setSuggestion(null)
     try {
       const response = await fetch('/api/suggestPokemon', {
         method: 'POST',
@@ -30,33 +24,75 @@ export default function Home() {
     if (!response.ok){
       throw data
     }
-      setSuggestions(data.suggestion);
+      setSuggestion(data.suggestion);
     } catch (error) {
       alert(error.error?.message || error.error);
     }
   };
+  
+  const removeFromTeam = (index) => {
+    setTeam(team.filter((_, i) => i !== index))
+  }
+  
+  const addToTeam = (pokemon) => {
+    if (pokemon && team.length < 6) {
+      if (team.find(p => p.name === pokemon.name)) {
+        alert("Este Pokémon ya está en tu equipo.");
+      } else {
+        setTeam([...team, pokemon])
+      }
+    }
+  }
 
   return (
-    <div className="grid items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col items-center justify-center gap-8">
-        <h1 className="text-4xl font-bold">Construye tu Equipo Pokémon</h1>
-        <PokemonSearch onAddToTeam={addToTeam}  />
-        <h2 className="text-2xl font-bold">Mi Equipo</h2>
-        <div className="flex flex-wrap gap-4">
-          {team.map(pokemon => (
-            <div key={pokemon.name}>
-              <h4>{pokemon.name}</h4>
-              <img src={pokemon.sprites.front_default} alt={pokemon.name} />
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-col gap-4">
-          <button onClick={fetchSuggestions}>Sugerir Pokémon</button>
-          {suggestions && <div>
-            <p>{suggestions}</p>
-          </div>}
-        </div>
-      </main>
+    <div className="container h-screen mx-auto p-4 space-y-6 flex flex-col justify-center">
+      <h1 className="text-3xl font-bold text-center">Creador de Equipo Pokémon</h1>
+      <div className="flex space-x-2 justify-center">
+        <PokemonSearch onAddToTeam={addToTeam} />
+      </div>
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Tu Equipo Pokémon</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-3 gap-4">
+            {team.map((pokemon, index) => (
+              <Card key={index} className="w-full">
+                <CardContent className="flex flex-col items-center p-4">
+                  <img src={pokemon.image} alt={pokemon.name} className="w-24 h-24 mb-2" />
+                  <span className="text-lg">{pokemon.name}</span>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => removeFromTeam(index)}
+                    className="mt-2">
+                    Eliminar
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+      <div className="flex justify-center">
+        <Button 
+          onClick={getSuggestion}
+          disabled={team.length === 0}
+        >
+          Obtener Sugerencia de OpenAI
+        </Button>
+      </div>
+      {suggestion && (
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Sugerencia de OpenAI</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>{suggestion}</p>
+          </CardContent>
+        </Card>
+      )}
     </div>
+    
   );
 }

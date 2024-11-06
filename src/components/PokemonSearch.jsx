@@ -1,6 +1,9 @@
 'use client'
 import { useState } from 'react'
 import { cn, getPokemonColor } from '@/lib/utils';
+import { Input } from './ui/input';
+import { Button } from './ui/button';
+import PokemonCard from './PokemonCard';
 
 export function PokemonSearch({
   onAddToTeam,
@@ -17,31 +20,26 @@ export function PokemonSearch({
       alert("Pokémon no encontrado");
     }
   };
+  
+  const handleAddToTeam = () => {
+    onAddToTeam(pokemonData);
+    setPokemonData(null);
+    setPokemonName('');
+  }
 
   return (
     <div className="flex w-full max-w-sm items-center space-x-2 flex-col gap-8">
       <div className="flex items-center justify-center gap-4">
-        <input
+        <Input
           type="text"
           placeholder="Nombre del Pokémon"
           value={pokemonName}
           onChange={(e) => setPokemonName(e.target.value)}
       />
-        <button onClick={fetchPokemon}>Buscar</button>
+        <Button onClick={fetchPokemon}>Buscar</Button>
       </div>
       {pokemonData && (
-        <div 
-          // inline-style
-          style={{
-            backgroundColor: getPokemonColor(pokemonData.types[0].type.name)
-          }}
-          className={"flex flex-col items-center justify-center gap-4 p-4 rounded-lg"}
-          onClick={() => onAddToTeam(pokemonData)}
-        >
-          <h2 className="text-2xl font-bold">{pokemonData.name}</h2>
-          <img src={pokemonData.sprites.front_default} alt={pokemonData.name} />
-          <p className="text-lg">Tipo: {pokemonData.types.map(type => type.type.name).join(', ')}</p>
-        </div>
+        <PokemonCard pokemon={pokemonData} onAddToTeam={handleAddToTeam} />
       )}
     </div>
   )
