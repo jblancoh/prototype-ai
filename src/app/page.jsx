@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
 import PokemonCard from "@/components/PokemonCard";
+import PokemonTeam from "@/components/PokemonTeam";
+import SuggestionIA from "@/components/SuggestionIA";
 
 export default function Home() {
   const [team, setTeam] = useState([]);
@@ -51,40 +53,8 @@ export default function Home() {
       <div className="flex space-x-2 justify-center">
         <PokemonSearch onAddToTeam={addToTeam} />
       </div>
-      <Card className="w-full">
-        <CardHeader>
-          <CardTitle>Tu Equipo Pokémon</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-3 gap-4">
-            {team.map((pokemon, index) => (
-              <PokemonCard 
-                pokemon={pokemon}
-                onRemove={() => removeFromTeam(index)}
-                key={index}
-              />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-      <div className="flex justify-center">
-        <Button 
-          onClick={getSuggestion}
-          disabled={team.length === 0}
-        >
-          Obtener Sugerencia de OpenAI
-        </Button>
-      </div>
-      {suggestion && (
-        <Card className="w-full">
-          <CardHeader>
-            <CardTitle>Sugerencia de OpenAI</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p>{suggestion}</p>
-          </CardContent>
-        </Card>
-      )}
+      <PokemonTeam team={team} removeFromTeam={removeFromTeam} />
+      <SuggestionIA suggestion={suggestion} getSuggestion={getSuggestion} team={team} />
     </div>
     
   );
