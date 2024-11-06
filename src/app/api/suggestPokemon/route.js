@@ -1,14 +1,12 @@
 // app/api/suggestPokemon/route.js
-// const body = JSON.stringify({ inputs: `Tengo un equipo con los siguientes Pokémon: ${team}. ¿Qué otro Pokémon debería agregar para equilibrar mi equipo?` })
-// const response = await fetch('https://api-inference.huggingface.co/models/google/t5-v1_1-xxl', {
-
 import { NextResponse } from 'next/server';
 
 export async function POST(request) {
   const { team } = await request.json();
   const body = JSON.stringify({
     model: "gpt-3.5-turbo",
-    messages: [{ role: "user", content: `Tengo un equipo con los siguientes Pokémon: ${team}. ¿Qué otro Pokémon debería agregar para equilibrar mi equipo?` }]
+    messages: [{ role: "user", content: `Tengo un equipo con los siguientes Pokémon: ${team}. ¿Qué otro Pokémon debería agregar para equilibrar mi equipo?, 
+      si ya hay 6 Pokémon, no agregues ninguno y dar mas detalles sobre el equipo` }]
   })
 
   try {
