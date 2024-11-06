@@ -3,6 +3,7 @@ import { PokemonSearch } from "@/components/PokemonSearch";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button";
+import PokemonCard from "@/components/PokemonCard";
 
 export default function Home() {
   const [team, setTeam] = useState([]);
@@ -57,19 +58,11 @@ export default function Home() {
         <CardContent>
           <div className="grid grid-cols-3 gap-4">
             {team.map((pokemon, index) => (
-              <Card key={index} className="w-full">
-                <CardContent className="flex flex-col items-center p-4">
-                  <img src={pokemon.image} alt={pokemon.name} className="w-24 h-24 mb-2" />
-                  <span className="text-lg">{pokemon.name}</span>
-                  <Button
-                    variant="destructive"
-                    size="sm"
-                    onClick={() => removeFromTeam(index)}
-                    className="mt-2">
-                    Eliminar
-                  </Button>
-                </CardContent>
-              </Card>
+              <PokemonCard 
+                pokemon={pokemon}
+                onRemove={() => removeFromTeam(index)}
+                key={index}
+              />
             ))}
           </div>
         </CardContent>

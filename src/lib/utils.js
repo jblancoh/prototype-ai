@@ -29,3 +29,7 @@ export const getPokemonColor = (type) => {
 
   return colorMap[type.toLowerCase()];
 };
+
+export const getTextColor = (type) => {
+  return type === 'dark' ? 'text-white' : 'text-black';
+};

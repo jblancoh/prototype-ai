@@ -28,7 +28,7 @@ export function PokemonSearch({
   }
 
   return (
-    <div className="flex w-full max-w-sm items-center space-x-2 flex-col gap-8">
+    <div className="flex w-full items-center space-x-2 flex-col gap-8">
       <div className="flex items-center justify-center gap-4">
         <Input
           type="text"
@@ -38,9 +38,11 @@ export function PokemonSearch({
       />
         <Button onClick={fetchPokemon}>Buscar</Button>
       </div>
-      {pokemonData && (
-        <PokemonCard pokemon={pokemonData} onAddToTeam={handleAddToTeam} />
-      )}
+      <div className="flex justify-center w-1/5">
+        {pokemonData && (
+          <PokemonCard pokemon={pokemonData} onAddToTeam={handleAddToTeam} />
+        )}
+      </div>
     </div>
   )
 }
