@@ -1,7 +1,5 @@
 'use client'
 import { useState } from 'react'
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
 import { cn, getPokemonColor } from '@/lib/utils';
 
 export function PokemonSearch({
@@ -23,13 +21,13 @@ export function PokemonSearch({
   return (
     <div className="flex w-full max-w-sm items-center space-x-2 flex-col gap-8">
       <div className="flex items-center justify-center gap-4">
-        <Input
+        <input
           type="text"
-        placeholder="Nombre del Pokémon"
-        value={pokemonName}
-        onChange={(e) => setPokemonName(e.target.value)}
+          placeholder="Nombre del Pokémon"
+          value={pokemonName}
+          onChange={(e) => setPokemonName(e.target.value)}
       />
-        <Button onClick={fetchPokemon}>Buscar</Button>
+        <button onClick={fetchPokemon}>Buscar</button>
       </div>
       {pokemonData && (
         <div 
