@@ -1,6 +1,5 @@
 'use client'
 import { useState } from 'react'
-import { cn, getPokemonColor } from '@/lib/utils';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
 import PokemonCard from './PokemonCard';
@@ -10,14 +9,21 @@ export function PokemonSearch({
 }) {
   const [pokemonName, setPokemonName] = useState('');
   const [pokemonData, setPokemonData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchPokemon = async () => {
-    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
-    if (response.ok) {
+    setLoading(true);
+    try {
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`);
+      if (!response.ok) {
+        throw new Error('Pokémon no encontrado');
+      }
       const data = await response.json();
       setPokemonData(data);
-    } else {
-      alert("Pokémon no encontrado");
+    } catch (error) {
+      alert(error.message);
+    } finally {
+      setLoading(false);
     }
   };
   
@@ -40,7 +46,7 @@ export function PokemonSearch({
       </div>
       <div className="flex justify-center w-1/5">
         {pokemonData && (
-          <PokemonCard pokemon={pokemonData} onAddToTeam={handleAddToTeam} />
+          <PokemonCard pokemon={pokemonData} onAddToTeam={handleAddToTeam} loading={loading} />
         )}
       </div>
     </div>
